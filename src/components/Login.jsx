@@ -1,24 +1,41 @@
 import React, { useState, useEffect } from 'react';
+import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { Link } from 'react-router-dom';
 import Profile from './Profile';
 
+import { auth } from '../firebase';
 
 const Form = () => {
 
-    const [login, setLogin] = useState({
+    const [loginEmail, setLoginEmail] = useState('');
+    const [loginPassword, setLoginPassword] = useState('');
+    const [success, setSuccess] = useState(false);
+    const [userData, setUserData] = useState({
         email: '',
-        password: ''
+        token: '',
     });
-    var success = false;
-    const checkEmailPw = () => {
-        console.log(login);
-        success = true;
+    var user;
+    const checkLogin = async () => {
+        try {
+            user = await signInWithEmailAndPassword(auth, loginEmail, loginPassword);
+            console.log(user._tokenResponse);
+            setUserData({
+                email: user._tokenResponse.email,
+                token: user._tokenResponse.idToken
+            })
+            setSuccess(true);
+            setLoginEmail('');
+            setLoginPassword('');
+        } catch (err) {
+            alert("Wrong Credentials")
+            console.log(err.message);
+        }
     }
 
 
     return (
         <>
-            {success ? <Profile /> : (
+            {success ? <Profile credentials={userData} success={success} /> : (
                 <div className="container_width">
                     <div className="text-right">
                         <Link to="/" className="btn_style">Signup</Link>
@@ -36,9 +53,9 @@ const Form = () => {
                                             name="email"
                                             autoComplete="off"
                                             onChange={(event) =>
-                                                setLogin({ ...login, email: event.target.value })
+                                                setLoginEmail(event.target.value)
                                             }
-                                            value={login.email}
+                                            value={loginEmail}
                                             required
                                         />
                                         <label htmlFor="email" className="label-name">
@@ -51,9 +68,9 @@ const Form = () => {
                                             name="password"
                                             autoComplete="off"
                                             onChange={(event) =>
-                                                setLogin({ ...login, password: event.target.value })
+                                                setLoginPassword(event.target.value)
                                             }
-                                            value={login.password}
+                                            value={loginPassword}
                                             required
                                         />
                                         <label htmlFor="password" className="label-name">
@@ -62,7 +79,7 @@ const Form = () => {
                                     </div>
 
                                     <div className="btn_container">
-                                        <button type="button" className="btn_style" onClick={() => checkEmailPw()}>LOGIN</button>
+                                        <button type="button" className="btn_style" onClick={() => checkLogin()}>LOGIN</button>
                                     </div>
                                 </form>
                             </div>

@@ -179,3 +179,24 @@ body {
 .text-right {
   text-align: right
 }
+
+.table {
+  width: 100%;
+  text-align: left;
+  border: 1px solid #ccc;
+  border-collapse: collapse;
+}
+
+.table th,
+td {
+  border: 1px solid #ccc;
+  padding: 12px;
+}
+
+.alert {
+  text-align: center;
+  padding: 8px 18px;
+  background-color: red;
+  color: #fff;
+  margin: 12px 0;
+}

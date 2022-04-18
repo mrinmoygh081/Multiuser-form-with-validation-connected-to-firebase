@@ -7,10 +7,12 @@ import Personal from './Personal';
 import Other from './Other';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import validator from 'validator';
 
 const Form = () => {
 
     const [page, setPage] = useState(0);
+    const [error, setError] = useState(false);
     const [data, setData] = useState({
         name: '',
         email: '',
@@ -30,9 +32,9 @@ const Form = () => {
     const FormSubTitles = ['Set up your account with your email and phone', 'Tell us your personal info', 'Your Social Profile Info'];
 
     const { register, handleSubmit, formState: { errors } } = useForm();
-    const onSubmit = (data) => {
-        console.log(data);
-    }
+    // const onSubmit = (data) => {
+    //     console.log(data);
+    // }
 
     // console.log(errors);
 
@@ -52,47 +54,60 @@ const Form = () => {
     }
 
     // Connect With Firebase
-    // const submitData = async () => {
-    //     const { name, phone, email, password, age, address, zip, linkedIn, instagram, dribble } = data;
-    //     try {
-    //         const user = await createUserWithEmailAndPassword(auth, email, password);
-    //         console.log(user);
-    //     } catch (err) {
-    //         console.log(err.message);
-    //     }
-    //     const res = await fetch(
-    //         "https://practice-5c656-default-rtdb.firebaseio.com/userDatas.json",
-    //         {
-    //             method: "POST",
-    //             headers: {
-    //                 "Content-Type": "application/json"
-    //             },
-    //             body: JSON.stringify({
-    //                 name, phone, email, age, address, zip, linkedIn, instagram, dribble
-    //             })
-    //         }
-    //     );
+    const submitData = async () => {
+        const { name, email, password, age, address, zip, linkedIn, instagram, dribble } = data;
 
-    //     if (res) {
-    //         alert("Data Stored");
-    //     } else {
-    //         alert("Please fill the data")
-    //     }
+        if (
+            name.trim() === '' ||
+            email.trim() === '' ||
+            password.trim() === '' ||
+            age.trim() === '' ||
+            address.trim() === '' ||
+            linkedIn.trim() === '' ||
+            instagram.trim() === '' ||
+            dribble.trim() === ''
+        ) {
+            setError(true);
+        } else {
 
-    // }
+            try {
+                const user = await createUserWithEmailAndPassword(auth, email, password);
+                console.log(user);
+                alert("Account Setup Successfully")
+            } catch (err) {
+                console.log(err.message);
+            }
+            const res = await fetch(
+                "https://practice-5c656-default-rtdb.firebaseio.com/userDatas.json",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        name, email, age, address, zip, linkedIn, instagram, dribble
+                    })
+                }
+            );
+
+            if (res) {
+                alert("Data Stored to Firebase");
+            } else {
+                alert("Please fill the data")
+            }
+        }
+
+    }
+
+    // setTimeout(() => {
+    //     setError(false);
+    // }, 10000)
 
     // Authentication
-    // const login = async () => {
-    //     try {
-    //         const user = await signInWithEmailAndPassword(auth, loginEmail, loginPassword);
-    //         console.log(user);
-    //     } catch (err) {
-    //         console.log(err.message);
-    //     }
-    // }
-    // const logout = async () => {
-    //     signOut(auth)
-    // }
+
+    const logout = async () => {
+        signOut(auth)
+    }
 
     return (
         <div className="container_width">
@@ -107,13 +122,8 @@ const Form = () => {
                         </div>
                         <h3>{FormTitles[page]}</h3>
                         <p>{FormSubTitles[page]}</p>
-                        {/* <p>{userEmail?.email} <button onClick={() => logout()}>Sign Out</button></p> */}
-                        <form onSubmit={handleSubmit(onSubmit)}>
-
-                            {/* <input type="text"
-                                {...register('fname', { required: true })} />
-
-                            {errors.fname && <p>Please check the First Name</p>} */}
+                        {error ? <p className="alert">Please fill up all fields </p> : ""}
+                        <form>
 
                             {PageDisplay()}
 
@@ -127,12 +137,12 @@ const Form = () => {
                                     }}
                                 >PREV STEP</button>
                                 <button
+                                    type="button"
                                     className="btn_style"
                                     onClick={() => {
                                         if (page === FormTitles.length - 1) {
-                                            alert("Form send")
-                                            // console.log(data);
-                                            // submitData()
+                                            console.log(data);
+                                            submitData()
                                         } else {
                                             setPage((curPage) => curPage + 1)
                                         }

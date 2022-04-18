@@ -15,13 +15,13 @@ const Signup = ({ data, setData, register, errors }) => {
                         setData({ ...data, name: event.target.value })
                     }
                     required
-                    {...register('nname', { required: true })}
+                // {...register('nname', { required: true })}
                 />
                 <label htmlFor="name" className="label-name">
                     <span className="content-name">Name</span>
                 </label>
             </div>
-            {errors.nname && <p>Please Fill Up Your Name</p>}
+            {/* {errors.nname && <p>Please Fill Up Your Name</p>} */}
             <div className="form">
                 <input
                     type="email"
@@ -32,13 +32,11 @@ const Signup = ({ data, setData, register, errors }) => {
                         setData({ ...data, email: event.target.value })
                     }
                     required
-                    {...register('email', { required: true })}
                 />
                 <label htmlFor="email" className="label-name">
                     <span className="content-name">Email</span>
                 </label>
             </div>
-            {errors.email && <p>Please Fill Up Your Name</p>}
             <div className="form">
                 <input
                     type="text"
@@ -49,13 +47,11 @@ const Signup = ({ data, setData, register, errors }) => {
                         setData({ ...data, password: event.target.value })
                     }
                     required
-                    {...register('password', { required: true })}
                 />
                 <label htmlFor="password" className="label-name">
                     <span className="content-name">Set Password</span>
                 </label>
             </div>
-            {errors.password && <p>Please Fill Up Your Name</p>}
         </div>
     )
 }
