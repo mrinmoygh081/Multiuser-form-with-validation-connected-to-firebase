@@ -1,23 +1,42 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { onAuthStateChanged } from 'firebase/auth';
+import { getAuth } from "firebase/auth";
+// import { database } from '../firebase'
+
 
 import Login from './Login';
 // import { db } from '../firebase';
 
 const Profile = ({ credentials, success }) => {
-    // const [user, setUser] = useState([]);
+    const [userInfo, setUserInfo] = useState([]);
+
 
     useEffect(() => {
         const getUserData = async () => {
-            // const config = {
-            //     headers: {
-            //         Authorization: `Bearer ${credentials.token}`,
-            //     }
-            // }
-            const res = await fetch(`https://practice-5c656-default-rtdb.firebaseio.com/userDatas.json?auth=${credentials.token}`);
-            console.log(res);
+            const config = {
+                headers: {
+                    'Accept': 'application/json'
+                }
+            }
+            const res = await fetch(`https://practice-5c656-default-rtdb.firebaseio.com/userDatas.json?auth=${credentials.token}`, config);
+            const result = await res.json();
+            console.log(result);
         }
         getUserData();
+
+        const auth = getAuth();
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                const uid = user.uid;
+                console.log(uid);
+                setUserInfo(user.email)
+            } else {
+                console.log("rerror")
+            }
+        });
+
+        console.log(userInfo);
     }, []);
 
     return (
@@ -36,35 +55,35 @@ const Profile = ({ credentials, success }) => {
                                     <tbody>
                                         <tr>
                                             <th scope="row">Name</th>
-                                            <td>Mark</td>
+                                            <td>Mrinmoy Ghosh</td>
                                         </tr>
                                         <tr>
                                             <th scope="row">Email</th>
-                                            <td>Mark</td>
+                                            <td>m@gmail.com</td>
                                         </tr>
                                         <tr>
                                             <th scope="row">Age</th>
-                                            <td>Mark</td>
+                                            <td>26</td>
                                         </tr>
                                         <tr>
                                             <th scope="row">Address</th>
-                                            <td>Mark</td>
+                                            <td>Milki</td>
                                         </tr>
                                         <tr>
                                             <th scope="row">ZIP Code</th>
-                                            <td>Mark</td>
+                                            <td>732211</td>
                                         </tr>
                                         <tr>
                                             <th scope="row">LinkedIn</th>
-                                            <td>Mark</td>
+                                            <td>@linkedin</td>
                                         </tr>
                                         <tr>
                                             <th scope="row">Instagram</th>
-                                            <td>Mark</td>
+                                            <td>@insta</td>
                                         </tr>
                                         <tr>
                                             <th scope="row">Dribble</th>
-                                            <td>Mark</td>
+                                            <td>@dribble</td>
                                         </tr>
                                     </tbody>
                                 </table>

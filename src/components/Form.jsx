@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
-import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 import { auth } from '../firebase';
 import Signup from './Signup';
 import Personal from './Personal';
 import Other from './Other';
 import { Link } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import validator from 'validator';
 
 const Form = () => {
 
@@ -24,32 +22,20 @@ const Form = () => {
         instagram: '',
         dribble: ''
     });
-    // const [userEmail, setUserEmail] = useState({});
-    // const [loginEmail, setLoginEmail] = useState({});
-    // const [loginPassword, setLoginPassword] = useState({});
 
     const FormTitles = ['Account Set Up', 'Your Personal Info', 'Other Info'];
     const FormSubTitles = ['Set up your account with your email and phone', 'Tell us your personal info', 'Your Social Profile Info'];
 
-    const { register, handleSubmit, formState: { errors } } = useForm();
-    // const onSubmit = (data) => {
-    //     console.log(data);
-    // }
 
-    // console.log(errors);
-
-    // onAuthStateChanged(auth, (currentUser) => {
-    //     setUserEmail(currentUser);
-    // })
 
     // Form Position
     const PageDisplay = () => {
         if (page === 0) {
-            return <Signup data={data} setData={setData} register={register} errors={errors} />
+            return <Signup data={data} setData={setData} />
         } else if (page === 1) {
-            return <Personal data={data} setData={setData} register={register} errors={errors} />
+            return <Personal data={data} setData={setData} />
         } else if (page === 2) {
-            return <Other data={data} setData={setData} register={register} errors={errors} />
+            return <Other data={data} setData={setData} />
         }
     }
 
@@ -97,16 +83,6 @@ const Form = () => {
             }
         }
 
-    }
-
-    // setTimeout(() => {
-    //     setError(false);
-    // }, 10000)
-
-    // Authentication
-
-    const logout = async () => {
-        signOut(auth)
     }
 
     return (

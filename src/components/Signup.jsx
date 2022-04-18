@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-const Signup = ({ data, setData, register, errors }) => {
+const Signup = ({ data, setData }) => {
 
     return (
         <div>
@@ -15,13 +15,11 @@ const Signup = ({ data, setData, register, errors }) => {
                         setData({ ...data, name: event.target.value })
                     }
                     required
-                // {...register('nname', { required: true })}
                 />
                 <label htmlFor="name" className="label-name">
                     <span className="content-name">Name</span>
                 </label>
             </div>
-            {/* {errors.nname && <p>Please Fill Up Your Name</p>} */}
             <div className="form">
                 <input
                     type="email"
