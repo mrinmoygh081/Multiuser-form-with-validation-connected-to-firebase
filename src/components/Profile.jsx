@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { onAuthStateChanged } from 'firebase/auth';
-import { getAuth } from "firebase/auth";
-// import { database } from '../firebase'
+// import { onAuthStateChanged } from 'firebase/auth';
+// import { getAuth } from "firebase/auth";
+// import firebase from '../firebase'
 
 
 import Login from './Login';
-// import { db } from '../firebase';
 
-const Profile = ({ credentials, success }) => {
-    const [userInfo, setUserInfo] = useState([]);
+
+const Profile = ({ loginEmail, credentials, success }) => {
+
+    const [resArr, setResArr] = useState([]);
 
 
     useEffect(() => {
@@ -21,24 +22,66 @@ const Profile = ({ credentials, success }) => {
             }
             const res = await fetch(`https://practice-5c656-default-rtdb.firebaseio.com/userDatas.json?auth=${credentials.token}`, config);
             const result = await res.json();
-            console.log(result);
+
+            const arr = [];
+            const newArr = [];
+            for (const resul in result) {
+                arr.push(resul);
+                // console.log(`${result[resul]}`);
+            }
+
+            arr.map((i) => {
+                // setResArr([...resArr, result[i]])
+                newArr.push(result[i])
+            })
+            setResArr(newArr);
         }
         getUserData();
 
-        const auth = getAuth();
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                const uid = user.uid;
-                console.log(uid);
-                setUserInfo(user.email)
-            } else {
-                console.log("rerror")
-            }
-        });
+        console.log(resArr);
 
-        console.log(userInfo);
     }, []);
 
+    const userInfo = resArr.map((item) => {
+        if (loginEmail == item.email) {
+            return (
+                <tbody>
+                    <tr>
+                        <th scope="row">Name</th>
+                        <td>{item.name}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Email</th>
+                        <td>{item.email}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Age</th>
+                        <td>{item.age}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Address</th>
+                        <td>{item.address}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">ZIP Code</th>
+                        <td>{item.zip}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">LinkedIn</th>
+                        <td>{item.linkedIn}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Instagram</th>
+                        <td>{item.instagram}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Dribble</th>
+                        <td>{item.dribble}</td>
+                    </tr>
+                </tbody>
+            )
+        }
+    })
     return (
         <div>
             {success ? (
@@ -52,40 +95,7 @@ const Profile = ({ credentials, success }) => {
                             <div className="contact_form">
                                 <h3>User Dummy Profile Dasboard</h3>
                                 <table className="table">
-                                    <tbody>
-                                        <tr>
-                                            <th scope="row">Name</th>
-                                            <td>Mrinmoy Ghosh</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Email</th>
-                                            <td>m@gmail.com</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Age</th>
-                                            <td>26</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Address</th>
-                                            <td>Milki</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">ZIP Code</th>
-                                            <td>732211</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">LinkedIn</th>
-                                            <td>@linkedin</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Instagram</th>
-                                            <td>@insta</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Dribble</th>
-                                            <td>@dribble</td>
-                                        </tr>
-                                    </tbody>
+                                    {userInfo}
                                 </table>
 
                             </div>

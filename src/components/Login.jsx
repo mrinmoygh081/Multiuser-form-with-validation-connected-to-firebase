@@ -24,7 +24,7 @@ const Form = () => {
                 token: user._tokenResponse.idToken
             })
             setSuccess(true);
-            setLoginEmail('');
+            // setLoginEmail('');
             setLoginPassword('');
         } catch (err) {
             alert("Wrong Credentials")
@@ -35,7 +35,7 @@ const Form = () => {
 
     return (
         <>
-            {success ? <Profile credentials={userData} success={success} /> : (
+            {success ? <Profile loginEmail={loginEmail} credentials={userData} success={success} /> : (
                 <div className="container_width">
                     <div className="text-right">
                         <Link to="/" className="btn_style">Signup</Link>
